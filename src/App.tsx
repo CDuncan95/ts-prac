@@ -27,10 +27,6 @@ class App extends Component<AppProps, AppState> {
     });
   }
 
-  renderListItems = (items: Array<APIListItem> | undefined) => {
-    return items ? items : [] 
-  }
-
   render() {
     return (
       <div className="App">
@@ -50,7 +46,7 @@ class App extends Component<AppProps, AppState> {
         </header>
         { this.state.loading ?
           (<p>Loading</p>) :
-          (<ItemList listItems={this.renderListItems(this.state.data)}></ItemList>)
+          (<ItemList listItems={this.state.data || []}></ItemList>)
         }
       </div>
     );
