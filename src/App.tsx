@@ -1,8 +1,36 @@
 import React, { Component } from 'react';
+import { get, APIListItem } from './apis/temp'
+import ItemList from './components/ItemList'
 import logo from './logo.svg';
 import './App.css';
+import { getPriority } from 'os';
 
-class App extends Component {
+interface AppProps {
+
+}
+
+interface AppState {
+  loading: Boolean,
+  data: Array<APIListItem>
+}
+
+class App extends Component<AppProps, AppState> {
+
+  constructor(props: AppProps) {
+    super(props);
+    this.state = {loading: true, data: []};
+  }
+
+  componentDidMount() {
+    get().then((data: Array<APIListItem>) => {
+      this.setState({ data, loading: false })
+    });
+  }
+
+  renderListItems = (items: Array<APIListItem> | undefined) => {
+    return items ? items : [] 
+  }
+
   render() {
     return (
       <div className="App">
@@ -20,6 +48,10 @@ class App extends Component {
             Learn React
           </a>
         </header>
+        { this.state.loading ?
+          (<p>Loading</p>) :
+          (<ItemList listItems={this.renderListItems(this.state.data)}></ItemList>)
+        }
       </div>
     );
   }

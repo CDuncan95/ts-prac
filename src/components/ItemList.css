@@ -1,0 +1,15 @@
+ul.ItemList {
+    list-style: none;
+}
+
+li.ListItem {
+    background-color: aquamarine;
+}
+
+li.ListItem button.VisibleButton {
+    background-color: blanchedalmond
+}
+
+li.ListItem button.HiddenButton {
+    display: None
+}
