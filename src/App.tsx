@@ -30,24 +30,17 @@ class App extends Component<AppProps, AppState> {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+        <header className="App-content">
           <p>
-            Edit <code>src/App.tsx</code> and save to reload.
+            Making a TODO list
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
         </header>
-        { this.state.loading ?
-          (<p>Loading</p>) :
-          (<ItemList listItems={this.state.data || []}></ItemList>)
-        }
+        <main className="App-content">
+          { this.state.loading ?
+            (<p>Loading</p>) :
+            (<ItemList listItems={this.state.data || []}></ItemList>)
+          }
+        </main>
       </div>
     );
   }
