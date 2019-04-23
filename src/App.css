@@ -12,18 +12,23 @@
   background-color: #282c34;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
 header.App-content {
-  min-height: 20vh;
+  height: 20vh;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
 }
 
 main.App-content {
   min-height: 80vh;
+  align-items: center;
+  justify-content: top;
+  padding-top: 20vh;
 }
 .App-link {
   color: #61dafb;
