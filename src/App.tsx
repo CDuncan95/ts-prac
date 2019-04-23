@@ -31,9 +31,7 @@ class App extends Component<AppProps, AppState> {
     return (
       <div className="App">
         <header className="App-content">
-          <p>
-            Making a TODO list
-          </p>
+          <h1>Making a TODO list</h1>
         </header>
         <main className="App-content">
           { this.state.loading ?
