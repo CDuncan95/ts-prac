@@ -17,6 +17,15 @@ li.ListItem {
     border-radius: 15px;
 }
 
+li.AddItem {
+    background-color: #282c40;
+    cursor: pointer;
+    user-select: none;
+}
+li.AddItem:hover {
+    background-color: #202545;
+}
+
 li.ListItem button.VisibleButton {
     background-color: #282c34;
     color: white;

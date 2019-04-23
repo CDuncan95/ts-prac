@@ -8,21 +8,15 @@ interface ItemListProps {
     listItems: Array<APIListItem>
 };
 
-interface ItemListState {
-
-};
-
-class ItemList extends Component<ItemListProps, ItemListState> {
-    public render() {
-        return (
-            <ul className='ItemList'>
-                {this.props.listItems.map((listItem : APIListItem, index ) => {
-                    console.log(listItem);
-                    return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
-                })}
-            </ul>
-        );
-    }
+const ItemList = (props : ItemListProps) => {
+    return (
+        <ul className='ItemList'>
+            {[(<AddItem key={-1} ></AddItem>), ...props.listItems.map((listItem : APIListItem, index ) => {
+                console.log(listItem);
+                return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
+            })]}
+        </ul>
+    );
 };
 
 interface ListItemProps {
@@ -71,6 +65,23 @@ class ListItem extends Component<ListItemProps, ListItemState> {
         this.setState({
             descriptionCollapsed: !this.state.descriptionCollapsed
         });
+    }
+}
+
+class AddItem extends Component {
+    render() {
+        return (
+            <li
+                className='ListItem AddItem'
+                onClick={this.onAddClicked.bind(this)}
+            >
+                <p>Add an item</p>
+            </li>
+        )
+    }
+
+    onAddClicked() {
+        console.log('add clicked');
     }
 }
 
