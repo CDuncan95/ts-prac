@@ -11,29 +11,18 @@ interface ItemListProps {
     addingItem : Boolean
 };
 
-
-class ItemList extends Component<ItemListProps> {
-    constructor(props: ItemListProps) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <ul className='ItemList'>
-                {[
-                    this.props.addingItem ? 
-                        (<AddItemEntries key={-1} cb_addItem={this.props.cb_addItem}></AddItemEntries>)
-                      : (<AddItemButton key={-1} cb_beginAddItem={this.props.cb_beginAddItem} ></AddItemButton>),
-                    ...this.props.listItems.map((listItem : APIListItem, index ) => {
-                        return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
-                })]}
-            </ul>
-        );
-    }
-
-    addItem(newItem : APIListItem) {
-        this.props.cb_addItem(newItem);
-    }
+export function ItemList(props : ItemListProps) {
+    return (
+        <ul className='ItemList'>
+            {[
+                props.addingItem ? 
+                    (<AddItemEntries key={-1} cb_addItem={props.cb_addItem}></AddItemEntries>)
+                  : (<AddItemButton key={-1} cb_beginAddItem={props.cb_beginAddItem} ></AddItemButton>),
+                ...props.listItems.map((listItem : APIListItem, index ) => {
+                    return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
+            })]}
+        </ul>
+    );
 }
 
 interface ListItemProps {
@@ -85,26 +74,19 @@ class ListItem extends Component<ListItemProps, ListItemState> {
     }
 }
 
-interface AddItemProps {
+interface AddItemButtonProps {
     cb_beginAddItem(): void
 };
 
-class AddItemButton extends Component<AddItemProps> {
-
-    constructor(props: AddItemProps) {
-        super(props);
-    }
-
-    render() {
-        return (
+const AddItemButton = (props : AddItemButtonProps) => {
+    return (
             <li
                 className='ListItem AddItem'
-                onClick={this.props.cb_beginAddItem}
+                onClick={props.cb_beginAddItem}
             >
                 <p>Add an item</p>
             </li>
         )
-    }
 }
 
 interface AddItemEntriesProps {
