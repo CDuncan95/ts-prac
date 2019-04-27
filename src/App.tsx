@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { ListApi, APIListItem } from './apis/temp'
 import ItemList from './components/ItemList'
-import logo from './logo.svg';
 import './App.css';
-import { getPriority } from 'os';
 
 interface AppProps {
 
@@ -11,7 +9,8 @@ interface AppProps {
 
 interface AppState {
   loading: Boolean,
-  data: Array<APIListItem>
+  data: Array<APIListItem>,
+  addingItem?: Boolean
 }
 
 class App extends Component<AppProps, AppState> {
@@ -39,11 +38,31 @@ class App extends Component<AppProps, AppState> {
         <main className="App-content">
           { this.state.loading ?
             (<p>Loading</p>) :
-            (<ItemList listItems={this.state.data || []}></ItemList>)
+            (<ItemList
+              listItems={this.state.data || []}
+              cb_beginAddItem={this.beginAddItem.bind(this)}
+              cb_addItem={this.addItem.bind(this)}
+              addingItem={!!this.state.addingItem}
+            ></ItemList>)
           }
         </main>
       </div>
     );
+  }
+
+  beginAddItem() {
+    this.setState({addingItem: true});
+  }
+
+  addItem(newItem: APIListItem) {
+    this.setState({
+      addingItem: false
+    });
+    this.listApi.addItem(newItem).then(newItemlist => {
+      this.setState({
+        data: newItemlist
+      });
+    })
   }
 }
 

@@ -5,19 +5,36 @@ import collapse from '../resources/collapse.png'
 import './ItemList.css';
 
 interface ItemListProps {
-    listItems: Array<APIListItem>
+    listItems : Array<APIListItem>,
+    cb_beginAddItem() : void,
+    cb_addItem(newItem: APIListItem) : void,
+    addingItem : Boolean
 };
 
-const ItemList = (props : ItemListProps) => {
-    return (
-        <ul className='ItemList'>
-            {[(<AddItem key={-1} ></AddItem>), ...props.listItems.map((listItem : APIListItem, index ) => {
-                console.log(listItem);
-                return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
-            })]}
-        </ul>
-    );
-};
+
+class ItemList extends Component<ItemListProps> {
+    constructor(props: ItemListProps) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <ul className='ItemList'>
+                {[
+                    this.props.addingItem ? 
+                        (<AddItemEntries key={-1} cb_addItem={this.props.cb_addItem}></AddItemEntries>)
+                      : (<AddItemButton key={-1} cb_beginAddItem={this.props.cb_beginAddItem} ></AddItemButton>),
+                    ...this.props.listItems.map((listItem : APIListItem, index ) => {
+                        return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
+                })]}
+            </ul>
+        );
+    }
+
+    addItem(newItem : APIListItem) {
+        this.props.cb_addItem(newItem);
+    }
+}
 
 interface ListItemProps {
     key: Number, // required for react
@@ -68,20 +85,53 @@ class ListItem extends Component<ListItemProps, ListItemState> {
     }
 }
 
-class AddItem extends Component {
+interface AddItemProps {
+    cb_beginAddItem(): void
+};
+
+class AddItemButton extends Component<AddItemProps> {
+
+    constructor(props: AddItemProps) {
+        super(props);
+    }
+
     render() {
         return (
             <li
                 className='ListItem AddItem'
-                onClick={this.onAddClicked.bind(this)}
+                onClick={this.props.cb_beginAddItem}
             >
                 <p>Add an item</p>
             </li>
         )
     }
+}
 
-    onAddClicked() {
-        console.log('add clicked');
+interface AddItemEntriesProps {
+    cb_addItem(newItem : APIListItem) : void
+}
+
+class AddItemEntries extends Component<AddItemEntriesProps> {
+    constructor(props: AddItemEntriesProps) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <li
+                className='ListItem AddItemEntries'    
+            >
+                <p>Adding an item</p>
+                <button onClick={this.addNewItem.bind(this)}></button>
+            </li>
+        )    
+    }
+
+    private addNewItem() {
+        this.props.cb_addItem({
+            title: "placeholder",
+            startDate: new Date()
+        });
     }
 }
 
