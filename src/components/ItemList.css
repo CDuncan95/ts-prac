@@ -3,7 +3,7 @@ ul.ItemList {
     width: 40%;
 }
 
-li.ListItem {
+li {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,7 +26,11 @@ li.AddItem:hover {
     background-color: #202545;
 }
 
-li.ListItem button.VisibleButton {
+li.AddItemEntries {
+    background-color: #4995ac;
+}
+
+li button.VisibleButton {
     background-color: #282c34;
     color: white;
     border-style: solid;
@@ -34,7 +38,7 @@ li.ListItem button.VisibleButton {
     border-radius: 3px;
 }
 
-li.ListItem button.HiddenButton {
+li button.HiddenButton {
     display: none
 }
 
