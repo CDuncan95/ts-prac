@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, APIListItem } from './apis/temp'
+import { ListApi, APIListItem } from './apis/temp'
 import ItemList from './components/ItemList'
 import logo from './logo.svg';
 import './App.css';
@@ -16,13 +16,16 @@ interface AppState {
 
 class App extends Component<AppProps, AppState> {
 
+  private listApi: ListApi;
+
   constructor(props: AppProps) {
     super(props);
     this.state = {loading: true, data: []};
+    this.listApi = new ListApi;
   }
 
   componentDidMount() {
-    get().then((data: Array<APIListItem>) => {
+    this.listApi.getItems().then((data: Array<APIListItem>) => {
       this.setState({ data, loading: false })
     });
   }
