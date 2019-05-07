@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { ListApi, APIListItem } from './apis/temp'
 import ItemList from './components/ItemList'
 import './App.css';
@@ -15,21 +15,21 @@ interface AppState {
 
 class App extends Component<AppProps, AppState> {
 
-  private listApi: ListApi;
+  private listApi: ListApi = new ListApi();
 
-  constructor(props: AppProps) {
-    super(props);
-    this.state = {loading: true, data: []};
-    this.listApi = new ListApi;
-  }
+  public readonly state: AppState = {
+    loading: true,
+    data: [],
+    addingItem: false
+  };
 
-  componentDidMount() {
+  public componentDidMount = (): void => {
     this.listApi.getItems().then((data: Array<APIListItem>) => {
       this.setState({ data, loading: false })
     });
-  }
+  };
 
-  render() {
+  public render = () : ReactElement => {
     return (
       <div className="App">
         <header className="App-content">
@@ -40,8 +40,8 @@ class App extends Component<AppProps, AppState> {
             (<p>Loading</p>) :
             (<ItemList
               listItems={this.state.data || []}
-              cb_beginAddItem={this.beginAddItem.bind(this)}
-              cb_addItem={this.addItem.bind(this)}
+              cb_beginAddItem={this.beginAddItem}
+              cb_addItem={this.addItem}
               addingItem={!!this.state.addingItem}
             ></ItemList>)
           }
@@ -50,11 +50,11 @@ class App extends Component<AppProps, AppState> {
     );
   }
 
-  beginAddItem() {
+  public beginAddItem = (): void => {
     this.setState({addingItem: true});
   }
 
-  addItem(newItem: APIListItem) {
+  public addItem = (newItem: APIListItem): void => {
     this.setState({
       addingItem: false
     });

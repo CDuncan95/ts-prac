@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { APIListItem } from '../apis/temp'
 import expand from '../resources/expand.png'
 import collapse from '../resources/collapse.png'
@@ -11,7 +11,7 @@ interface ItemListProps {
     addingItem : Boolean
 };
 
-export function ItemList(props : ItemListProps) {
+export function ItemList(props : ItemListProps): ReactElement {
     return (
         <ul className='ItemList'>
             {[
@@ -37,21 +37,18 @@ interface ListItemState {
 
 class ListItem extends Component<ListItemProps, ListItemState> {
 
-    public constructor(props: ListItemProps) {
-        super(props);
-        this.state = {
-            descriptionCollapsed: true
-        };
-    }
+    public readonly state = {
+        descriptionCollapsed: true
+    };
 
-    public render() {
+    public render = () : ReactElement => {
         return (
             <li className="ListItem" id={`listItem${this.props.index}`}>
                 <div className="ListItemConstant">
                     <p className="ListItemTitle">{`${this.props.data.title}`}</p>
                     <img
                         className={this.props.data.description ? 'clickable' : 'notClickable'}
-                        onClick={this.props.data.description ? this.toggleCollapsedContent.bind(this) : this.expanderNOOP.bind(this) }
+                        onClick={this.props.data.description ? this.toggleCollapsedContent : ()=>{/*NOOP*/} }
                         src={this.state.descriptionCollapsed ? expand : collapse }
                     ></img>
                 </div>
@@ -65,9 +62,7 @@ class ListItem extends Component<ListItemProps, ListItemState> {
         );
     }
 
-    private expanderNOOP() {}
-
-    private toggleCollapsedContent() {
+    private toggleCollapsedContent = (): void => {
         this.setState({
             descriptionCollapsed: !this.state.descriptionCollapsed
         });
@@ -78,7 +73,7 @@ interface AddItemButtonProps {
     cb_beginAddItem(): void
 };
 
-const AddItemButton = (props : AddItemButtonProps) => {
+const AddItemButton = (props : AddItemButtonProps): ReactElement => {
     return (
             <li
                 className='ListItem AddItem'
@@ -94,22 +89,19 @@ interface AddItemEntriesProps {
 }
 
 class AddItemEntries extends Component<AddItemEntriesProps> {
-    constructor(props: AddItemEntriesProps) {
-        super(props);
-    }
 
-    render() {
+    public render(): ReactElement {
         return (
             <li
                 className='ListItem AddItemEntries'    
             >
                 <p>Adding an item</p>
-                <button onClick={this.addNewItem.bind(this)}></button>
+                <button onClick={this.addNewItem}></button>
             </li>
         )    
     }
 
-    private addNewItem() {
+    private addNewItem = (): void => {
         this.props.cb_addItem({
             title: "placeholder",
             startDate: new Date()
