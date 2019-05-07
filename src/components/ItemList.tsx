@@ -1,29 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { APIListItem } from '../apis/temp'
 import expand from '../resources/expand.png'
 import collapse from '../resources/collapse.png'
 import './ItemList.css';
 
 interface ItemListProps {
-    listItems: Array<APIListItem>
+    listItems : Array<APIListItem>,
+    cb_beginAddItem() : void,
+    cb_addItem(newItem: APIListItem) : void,
+    addingItem : Boolean
 };
 
-interface ItemListState {
-
-};
-
-class ItemList extends Component<ItemListProps, ItemListState> {
-    public render() {
-        return (
-            <ul className='ItemList'>
-                {this.props.listItems.map((listItem : APIListItem, index ) => {
-                    console.log(listItem);
+export function ItemList(props : ItemListProps): ReactElement {
+    return (
+        <ul className='ItemList'>
+            {[
+                props.addingItem ? 
+                    (<AddItemEntries key={-1} cb_addItem={props.cb_addItem}></AddItemEntries>)
+                  : (<AddItemButton key={-1} cb_beginAddItem={props.cb_beginAddItem} ></AddItemButton>),
+                ...props.listItems.map((listItem : APIListItem, index ) => {
                     return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
-                })}
-            </ul>
-        );
-    }
-};
+            })]}
+        </ul>
+    );
+}
 
 interface ListItemProps {
     key: Number, // required for react
@@ -37,21 +37,18 @@ interface ListItemState {
 
 class ListItem extends Component<ListItemProps, ListItemState> {
 
-    public constructor(props: ListItemProps) {
-        super(props);
-        this.state = {
-            descriptionCollapsed: true
-        };
-    }
+    public readonly state = {
+        descriptionCollapsed: true
+    };
 
-    public render() {
+    public render = () : ReactElement => {
         return (
             <li className="ListItem" id={`listItem${this.props.index}`}>
                 <div className="ListItemConstant">
                     <p className="ListItemTitle">{`${this.props.data.title}`}</p>
                     <img
                         className={this.props.data.description ? 'clickable' : 'notClickable'}
-                        onClick={this.props.data.description ? this.toggleCollapsedContent.bind(this) : this.expanderNOOP.bind(this) }
+                        onClick={this.props.data.description ? this.toggleCollapsedContent : ()=>{/*NOOP*/} }
                         src={this.state.descriptionCollapsed ? expand : collapse }
                     ></img>
                 </div>
@@ -65,11 +62,49 @@ class ListItem extends Component<ListItemProps, ListItemState> {
         );
     }
 
-    private expanderNOOP() {}
-
-    private toggleCollapsedContent() {
+    private toggleCollapsedContent = (): void => {
         this.setState({
             descriptionCollapsed: !this.state.descriptionCollapsed
+        });
+    }
+}
+
+interface AddItemButtonProps {
+    cb_beginAddItem(): void
+};
+
+const AddItemButton = (props : AddItemButtonProps): ReactElement => {
+    return (
+            <li
+                className='ListItem AddItem'
+                onClick={props.cb_beginAddItem}
+            >
+                <p>Add an item</p>
+            </li>
+        )
+}
+
+interface AddItemEntriesProps {
+    cb_addItem(newItem : APIListItem) : void
+}
+
+class AddItemEntries extends Component<AddItemEntriesProps> {
+
+    public render(): ReactElement {
+        return (
+            <li
+                className='ListItem AddItemEntries'    
+            >
+                <p>Adding an item</p>
+                <button onClick={this.addNewItem}></button>
+            </li>
+        )    
+    }
+
+    private addNewItem = (): void => {
+        this.props.cb_addItem({
+            title: "placeholder",
+            startDate: new Date()
         });
     }
 }

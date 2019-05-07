@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
-import { get, APIListItem } from './apis/temp'
+import React, { Component, ReactElement } from 'react';
+import { ListApi, APIListItem } from './apis/temp'
 import ItemList from './components/ItemList'
-import logo from './logo.svg';
 import './App.css';
-import { getPriority } from 'os';
 
 interface AppProps {
 
@@ -11,23 +9,27 @@ interface AppProps {
 
 interface AppState {
   loading: Boolean,
-  data: Array<APIListItem>
+  data: Array<APIListItem>,
+  addingItem?: Boolean
 }
 
 class App extends Component<AppProps, AppState> {
 
-  constructor(props: AppProps) {
-    super(props);
-    this.state = {loading: true, data: []};
-  }
+  private listApi: ListApi = new ListApi();
 
-  componentDidMount() {
-    get().then((data: Array<APIListItem>) => {
+  public readonly state: AppState = {
+    loading: true,
+    data: [],
+    addingItem: false
+  };
+
+  public componentDidMount = (): void => {
+    this.listApi.getItems().then((data: Array<APIListItem>) => {
       this.setState({ data, loading: false })
     });
-  }
+  };
 
-  render() {
+  public render = () : ReactElement => {
     return (
       <div className="App">
         <header className="App-content">
@@ -36,11 +38,31 @@ class App extends Component<AppProps, AppState> {
         <main className="App-content">
           { this.state.loading ?
             (<p>Loading</p>) :
-            (<ItemList listItems={this.state.data || []}></ItemList>)
+            (<ItemList
+              listItems={this.state.data || []}
+              cb_beginAddItem={this.beginAddItem}
+              cb_addItem={this.addItem}
+              addingItem={!!this.state.addingItem}
+            ></ItemList>)
           }
         </main>
       </div>
     );
+  }
+
+  public beginAddItem = (): void => {
+    this.setState({addingItem: true});
+  }
+
+  public addItem = (newItem: APIListItem): void => {
+    this.setState({
+      addingItem: false
+    });
+    this.listApi.addItem(newItem).then(newItemlist => {
+      this.setState({
+        data: newItemlist
+      });
+    })
   }
 }
 
