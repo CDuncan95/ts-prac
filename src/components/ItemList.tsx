@@ -7,17 +7,14 @@ import './ItemList.css';
 interface ItemListProps {
     listItems : Array<APIListItem>,
     cb_beginAddItem() : void,
-    cb_addItem(newItem: APIListItem) : void,
-    addingItem : Boolean
+    cb_addItem(newItem: APIListItem) : void
 };
 
 export function ItemList(props : ItemListProps): ReactElement {
     return (
         <ul className='ItemList'>
             {[
-                props.addingItem ? 
-                    (<AddItemEntries key={-1} cb_addItem={props.cb_addItem}></AddItemEntries>)
-                  : (<AddItemButton key={-1} cb_beginAddItem={props.cb_beginAddItem} ></AddItemButton>),
+                (<AddItemButton key={-1} cb_beginAddItem={props.cb_beginAddItem} ></AddItemButton>),
                 ...props.listItems.map((listItem : APIListItem, index ) => {
                     return (<ListItem data={listItem} index={index} key={index} ></ListItem>);
             })]}
@@ -96,7 +93,7 @@ class AddItemEntries extends Component<AddItemEntriesProps> {
                 className='ListItem AddItemEntries'    
             >
                 <p>Adding an item</p>
-                <button onClick={this.addNewItem}></button>
+                {/* <button onClick={this.addNewItem}></button> */}
             </li>
         )    
     }

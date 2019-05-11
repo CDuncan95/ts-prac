@@ -2,6 +2,7 @@ import React, { Component, ReactElement } from 'react';
 import { ListApi, APIListItem } from './apis/temp'
 import ItemList from './components/ItemList'
 import './App.css';
+import { AddItemPopup } from './components/AddItemPopup';
 
 interface AppProps {
 
@@ -41,9 +42,14 @@ class App extends Component<AppProps, AppState> {
             (<ItemList
               listItems={this.state.data || []}
               cb_beginAddItem={this.beginAddItem}
-              cb_addItem={this.addItem}
-              addingItem={!!this.state.addingItem}
-            ></ItemList>)
+              cb_addItem={this.addItem}/>)
+          }
+          { this.state.addingItem ?
+            (<AddItemPopup
+              cb_closePopup={this.closeAddItemPopup}
+              cb_addNewItem={this.addItem}
+              />) :
+            ""
           }
         </main>
       </div>
@@ -52,6 +58,10 @@ class App extends Component<AppProps, AppState> {
 
   public beginAddItem = (): void => {
     this.setState({addingItem: true});
+  }
+
+  public closeAddItemPopup = (): void => {
+    this.setState({addingItem: false});
   }
 
   public addItem = (newItem: APIListItem): void => {
