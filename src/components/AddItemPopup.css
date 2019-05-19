@@ -1,11 +1,3 @@
-textarea {
-    opacity: 1;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-    resize: none;
-}
-
 .add-item-popup {
     border-style: solid;
     border-color: azure;
@@ -17,6 +9,14 @@ textarea {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+textarea {
+    opacity: 1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    resize: none;
 }
 
 .add-item-entry {
@@ -31,6 +31,12 @@ textarea {
     background-color: rgba(98,153,170,0.2);
     color: white;
     font-size: 100%;
+}
+
+.button-container {
+    width: 80%;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .add-item-entry::placeholder {

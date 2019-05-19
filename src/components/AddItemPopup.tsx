@@ -8,26 +8,30 @@ interface AddItemPopupProps {
     cb_addNewItem(newItem: APIListItem) : void
 };
 
-// interface AddItemPopupState {
-
-// };
-
 export function AddItemPopup(props : AddItemPopupProps): ReactElement {
     const [ currentTitle, setCurrentTitle ] = useState('');
     const [ currentDescription, setCurrentDescription ] = useState('');
 
     const keydownEvent = (ev : any) => {
         if (ev.code.toUpperCase() === 'ESCAPE') {
-            console.log('escape pressed');
+            props.cb_closePopup();
         }
-    }
+    };
 
     useEffect(() => {
         document.addEventListener('keydown', keydownEvent);
         return function cleanup() {
             document.removeEventListener('keydown', keydownEvent);
         };
-    });
+    }, []);
+
+    const commit = () => {
+        props.cb_addNewItem({
+            title: currentTitle,
+            startDate: new Date(),
+            description: currentDescription.length ? currentDescription : undefined      
+        });
+    };
 
     return (
         <div className='modal'>
@@ -46,6 +50,12 @@ export function AddItemPopup(props : AddItemPopupProps): ReactElement {
                     onChange={({target : { value }}) => setCurrentDescription(value)}
                     
                     ></textarea>
+                <div className='button-container'>
+                    <button
+                        // style={{paddingLeft: 'auto'}}
+                        disabled={!currentTitle.length}
+                        onClick={commit}>Done!</button>
+                </div>
             </div>
         </div>
     );
